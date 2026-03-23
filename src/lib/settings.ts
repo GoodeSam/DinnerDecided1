@@ -67,16 +67,34 @@ export const ALL_SETTINGS_INGREDIENTS: string[] = [
   // Proteins
   "lean-pork", "eggs", "goose-eggs", "sea-bass", "yellow-catfish",
   "flounder", "silver-carp", "beef", "chicken-breast", "local-chicken",
-  "shrimp", "tofu",
+  "shrimp", "tofu", "lamb", "salmon", "cod", "tuna", "duck",
+  "chicken-thigh", "pork-belly", "ground-beef", "ground-pork", "squid",
+  "clams", "mussels", "scallops", "crab", "tempeh", "paneer",
+  "chicken-wings", "pork-ribs", "bacon", "sausage",
   // Vegetables
   "potatoes", "tomatoes", "broccoli", "leafy-greens", "cabbage",
   "eggplant", "cucumber", "celery", "carrots", "mushrooms", "wood-ear",
-  "bean-sprouts", "corn",
+  "bean-sprouts", "corn", "bell-pepper", "onion", "zucchini", "spinach",
+  "asparagus", "green-beans", "peas", "sweet-potato", "pumpkin",
+  "cauliflower", "bok-choy", "bamboo-shoots", "lotus-root", "bitter-melon",
+  "okra", "artichoke", "leek", "radish", "avocado", "kale", "lettuce",
+  "watercress", "snow-peas", "edamame", "seaweed", "kimchi", "pickled-vegetables",
   // Seasonings & aromatics
   "ginger", "scallions", "green-onions", "sichuan-pepper", "salt",
-  "soy-sauce", "vinegar",
+  "soy-sauce", "vinegar", "starch", "garlic", "chili-flakes", "cumin",
+  "turmeric", "curry-powder", "paprika", "black-pepper", "white-pepper",
+  "five-spice", "star-anise", "cinnamon", "bay-leaf", "oregano", "basil",
+  "thyme", "rosemary", "parsley", "cilantro", "dill", "olive-oil",
+  "sesame-oil", "coconut-milk", "fish-sauce", "oyster-sauce", "doubanjiang",
+  "miso", "wasabi", "lemon", "lime", "tomato-paste", "cream", "butter",
+  "cheese", "yogurt", "honey", "sugar", "rice-wine", "sake", "mirin",
+  "gochujang", "sriracha", "tahini", "mustard", "worcestershire",
+  "balsamic-vinegar", "coconut-oil", "ghee", "tamarind", "lemongrass",
+  "galangal", "kaffir-lime-leaf", "shallot",
   // Staples & starches
-  "flour", "starch", "noodles", "rice",
+  "flour", "noodles", "rice", "pasta", "bread", "tortilla", "couscous",
+  "quinoa", "udon", "soba", "rice-noodles", "vermicelli", "pita",
+  "potato-starch-noodles", "millet", "oats",
 ];
 
 export const ALL_EQUIPMENT: Equipment[] = [

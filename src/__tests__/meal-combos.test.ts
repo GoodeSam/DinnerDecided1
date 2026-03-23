@@ -4,6 +4,8 @@ import {
   type MealSlot,
   generateMealCombos,
   MEAL_INGREDIENT_CATALOG,
+  DISH_TEMPLATES,
+  COOKING_METHODS,
 } from "@/lib/meal-combos";
 import { type Settings, defaultSettings } from "@/lib/settings";
 
@@ -28,6 +30,68 @@ describe("Meal ingredient catalog", () => {
   });
 });
 
+describe("Dish template database", () => {
+  it("has at least 150 dish templates", () => {
+    expect(DISH_TEMPLATES.length).toBeGreaterThanOrEqual(150);
+  });
+
+  it("every template has valid bilingual names", () => {
+    for (const tpl of DISH_TEMPLATES) {
+      expect(tpl.nameEn.length).toBeGreaterThan(0);
+      expect(tpl.nameZh.length).toBeGreaterThan(0);
+    }
+  });
+
+  it("every template references a valid cooking method", () => {
+    const methodIds = new Set(COOKING_METHODS.map((m) => m.id));
+    for (const tpl of DISH_TEMPLATES) {
+      expect(methodIds.has(tpl.method)).toBe(true);
+    }
+  });
+
+  it("every template has realistic nutrition values", () => {
+    for (const tpl of DISH_TEMPLATES) {
+      expect(tpl.calories).toBeGreaterThan(0);
+      expect(tpl.calories).toBeLessThanOrEqual(800);
+      expect(tpl.proteinG).toBeGreaterThanOrEqual(0);
+      expect(tpl.carbsG).toBeGreaterThanOrEqual(0);
+      expect(tpl.fatG).toBeGreaterThanOrEqual(0);
+    }
+  });
+
+  it("every template ingredient exists in the catalog", () => {
+    const allCatalog = new Set([
+      ...MEAL_INGREDIENT_CATALOG.proteins,
+      ...MEAL_INGREDIENT_CATALOG.vegetables,
+      ...MEAL_INGREDIENT_CATALOG.staples,
+      ...MEAL_INGREDIENT_CATALOG.seasonings,
+    ]);
+    for (const tpl of DISH_TEMPLATES) {
+      if (tpl.protein) expect(allCatalog.has(tpl.protein)).toBe(true);
+      for (const v of tpl.vegetables) expect(allCatalog.has(v)).toBe(true);
+      for (const s of tpl.seasonings) expect(allCatalog.has(s)).toBe(true);
+      if (tpl.staple) expect(allCatalog.has(tpl.staple)).toBe(true);
+    }
+  });
+
+  it("has no duplicate dish names (English)", () => {
+    const names = DISH_TEMPLATES.map((t) => t.nameEn);
+    expect(new Set(names).size).toBe(names.length);
+  });
+
+  it("covers at least 8 distinct cuisine categories", () => {
+    const categories = new Set(DISH_TEMPLATES.map((t) => t.cuisine));
+    expect(categories.size).toBeGreaterThanOrEqual(8);
+  });
+
+  it("covers all cooking methods", () => {
+    const usedMethods = new Set(DISH_TEMPLATES.map((t) => t.method));
+    for (const m of COOKING_METHODS) {
+      expect(usedMethods.has(m.id)).toBe(true);
+    }
+  });
+});
+
 describe("generateMealCombos", () => {
   let settings: Settings;
 
@@ -41,20 +105,37 @@ describe("generateMealCombos", () => {
     expect(combos.length).toBeGreaterThan(0);
   });
 
+  it("generates at least 1000 meal combos with full ingredient set", () => {
+    const allIngredients = [
+      ...MEAL_INGREDIENT_CATALOG.proteins,
+      ...MEAL_INGREDIENT_CATALOG.vegetables,
+      ...MEAL_INGREDIENT_CATALOG.staples,
+      ...MEAL_INGREDIENT_CATALOG.seasonings,
+    ];
+    const fullSettings: Settings = {
+      ...settings,
+      ingredients: allIngredients,
+      equipment: ["wok", "steamer", "electric-griddle", "oven", "rice-cooker", "air-fryer"],
+      healthGoals: [],
+    };
+    const combos = generateMealCombos(fullSettings);
+    expect(combos.length).toBeGreaterThanOrEqual(1000);
+  });
+
   it("each combo has a name, slots, tags, and nutrition estimate", () => {
     const combos = generateMealCombos(settings);
     for (const combo of combos) {
       expect(combo.id).toBeDefined();
       expect(typeof combo.name.en).toBe("string");
       expect(typeof combo.name.zh).toBe("string");
-      expect(combo.slots.length).toBeGreaterThanOrEqual(2); // at least 2 dishes per meal
+      expect(combo.slots.length).toBeGreaterThanOrEqual(2);
       expect(combo.tags.length).toBeGreaterThan(0);
       expect(combo.nutrition).toBeDefined();
       expect(combo.nutrition.estimatedCalories).toBeGreaterThan(0);
     }
   });
 
-  it("each slot describes a dish with protein, vegetable, method, and staple", () => {
+  it("each slot describes a dish with ingredients and method", () => {
     const combos = generateMealCombos(settings);
     for (const combo of combos) {
       for (const slot of combo.slots) {
@@ -88,9 +169,8 @@ describe("generateMealCombos", () => {
     }
   });
 
-  it("tags combos as blood-sugar-friendly when health goals require it", () => {
+  it("tags combos as health-conscious when health goals require it", () => {
     const combos = generateMealCombos(settings);
-    // With default settings (blood sugar + lipid control), every combo should be tagged
     for (const combo of combos) {
       expect(combo.tags).toContain("health-conscious");
     }
@@ -109,9 +189,7 @@ describe("generateMealCombos", () => {
       ...settings,
       ingredients: ["eggs", "tomatoes", "rice", "salt", "soy-sauce", "green-onions"],
     });
-    // Limited should have fewer combos
     expect(limited.length).toBeLessThanOrEqual(full.length);
-    // And all combos should only use the limited ingredients
     for (const combo of limited) {
       for (const slot of combo.slots) {
         for (const ing of slot.ingredients) {
@@ -148,5 +226,24 @@ describe("generateMealCombos", () => {
       ingredients: ["rice", "tomatoes", "salt", "soy-sauce", "leafy-greens"],
     });
     expect(noProtein.length).toBeGreaterThan(0);
+  });
+
+  it("generates combos across multiple cuisines", () => {
+    const allIngredients = [
+      ...MEAL_INGREDIENT_CATALOG.proteins,
+      ...MEAL_INGREDIENT_CATALOG.vegetables,
+      ...MEAL_INGREDIENT_CATALOG.staples,
+      ...MEAL_INGREDIENT_CATALOG.seasonings,
+    ];
+    const fullSettings: Settings = {
+      ...settings,
+      ingredients: allIngredients,
+      equipment: ["wok", "steamer", "electric-griddle", "oven", "rice-cooker", "air-fryer"],
+      healthGoals: [],
+    };
+    const combos = generateMealCombos(fullSettings);
+    // Collect all unique dish names
+    const dishNames = new Set(combos.flatMap((c) => c.slots.map((s) => s.dishName.en)));
+    expect(dishNames.size).toBeGreaterThanOrEqual(50);
   });
 });
