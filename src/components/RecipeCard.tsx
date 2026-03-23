@@ -1,6 +1,7 @@
 "use client";
 
 import { Recipe } from "@/data/recipes";
+import { useI18n } from "@/lib/i18n-react";
 
 interface Props {
   recipe: Recipe;
@@ -10,6 +11,8 @@ interface Props {
 }
 
 export default function RecipeCard({ recipe, matchScore, onSelect, isBestChoice }: Props) {
+  const { t } = useI18n();
+
   return (
     <button
       onClick={onSelect}
@@ -21,7 +24,7 @@ export default function RecipeCard({ recipe, matchScore, onSelect, isBestChoice 
     >
       {isBestChoice && (
         <span className="absolute -top-3 left-4 rounded-full bg-amber-500 px-3 py-0.5 text-xs font-bold text-white shadow">
-          Best Choice
+          {t("recipes.bestChoice")}
         </span>
       )}
 
@@ -29,21 +32,21 @@ export default function RecipeCard({ recipe, matchScore, onSelect, isBestChoice 
         <span className="text-4xl">{recipe.image}</span>
         <div className="flex-1 min-w-0">
           <h3 className="text-lg font-bold text-stone-900 group-hover:text-amber-700 transition">
-            {recipe.name}
+            {t(`recipe.name.${recipe.id}`)}
           </h3>
           <p className="mt-1 text-sm text-stone-500 line-clamp-2">
-            {recipe.description}
+            {t(`recipe.desc.${recipe.id}`)}
           </p>
 
           <div className="mt-3 flex flex-wrap gap-2">
             <span className="inline-flex items-center gap-1 rounded-md bg-stone-100 px-2 py-0.5 text-xs text-stone-600">
-              ⏱ {recipe.time} min
+              {t("time.min", { n: recipe.time })}
             </span>
             <span className="inline-flex items-center gap-1 rounded-md bg-stone-100 px-2 py-0.5 text-xs text-stone-600">
-              👤 {recipe.servings} servings
+              {t("servings.label", { n: recipe.servings })}
             </span>
             <span className="inline-flex items-center gap-1 rounded-md bg-stone-100 px-2 py-0.5 text-xs text-stone-600">
-              🔥 {recipe.calories} cal
+              {t("calories.label", { n: recipe.calories })}
             </span>
             <span
               className={`inline-flex items-center rounded-md px-2 py-0.5 text-xs ${
@@ -54,11 +57,11 @@ export default function RecipeCard({ recipe, matchScore, onSelect, isBestChoice 
                   : "bg-red-100 text-red-700"
               }`}
             >
-              {recipe.difficulty}
+              {t(`difficulty.${recipe.difficulty}`)}
             </span>
             {recipe.bloodSugarFriendly && (
               <span className="inline-flex items-center rounded-md bg-blue-50 px-2 py-0.5 text-xs text-blue-600">
-                Blood Sugar Friendly
+                {t("filters.bloodSugar")}
               </span>
             )}
           </div>
@@ -73,7 +76,7 @@ export default function RecipeCard({ recipe, matchScore, onSelect, isBestChoice 
                   />
                 </div>
                 <span className="text-xs font-medium text-stone-500">
-                  {Math.round(matchScore)}% match
+                  {t("recipes.match", { score: Math.round(matchScore) })}
                 </span>
               </div>
             </div>
@@ -85,7 +88,7 @@ export default function RecipeCard({ recipe, matchScore, onSelect, isBestChoice 
                 key={tag}
                 className="rounded-full bg-amber-100 px-2 py-0.5 text-xs text-amber-700"
               >
-                {tag}
+                {t(`tag.${tag}`)}
               </span>
             ))}
           </div>

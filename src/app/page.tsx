@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { recipes, Recipe } from "@/data/recipes";
+import { I18nProvider, useI18n, LanguageSwitcher } from "@/lib/i18n-react";
 import IngredientSelector from "@/components/IngredientSelector";
 import Filters, { FilterState } from "@/components/Filters";
 import RecipeCard from "@/components/RecipeCard";
@@ -10,7 +11,7 @@ import CookingMode from "@/components/CookingMode";
 
 type View = "home" | "detail" | "cooking";
 
-export default function Home() {
+function App() {
   const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
   const [filters, setFilters] = useState<FilterState>({
     maxTime: 0,
@@ -22,11 +23,11 @@ export default function Home() {
   const [view, setView] = useState<View>("home");
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
   const [showFilters, setShowFilters] = useState(false);
+  const { t } = useI18n();
 
   const scoredRecipes = useMemo(() => {
     return recipes
       .map((recipe) => {
-        // Calculate ingredient match score
         const requiredIngredients = recipe.ingredients
           .filter((i) => !i.optional)
           .map((i) => i.name);
@@ -41,16 +42,12 @@ export default function Home() {
         return { recipe, matchScore };
       })
       .filter(({ recipe, matchScore }) => {
-        // If ingredients are selected, require at least 1 match
         if (selectedIngredients.length > 0 && matchScore === 0) return false;
-
         if (filters.maxTime > 0 && recipe.time > filters.maxTime) return false;
         if (filters.servings > 0 && recipe.servings < filters.servings) return false;
         if (filters.difficulty && recipe.difficulty !== filters.difficulty) return false;
-        if (filters.dietaryGoal && !recipe.tags.includes(filters.dietaryGoal))
-          return false;
+        if (filters.dietaryGoal && !recipe.tags.includes(filters.dietaryGoal)) return false;
         if (filters.bloodSugarFriendly && !recipe.bloodSugarFriendly) return false;
-
         return true;
       })
       .sort((a, b) => b.matchScore - a.matchScore);
@@ -84,14 +81,18 @@ export default function Home() {
             className="cursor-pointer"
           >
             <h1 className="text-xl font-bold text-stone-900">
-              <span className="text-amber-500">Dinner</span>Decided
+              <span className="text-amber-500">{t("app.brandAccent")}</span>
+              {t("app.brandRest")}
             </h1>
           </button>
-          {view === "home" && (
-            <span className="text-sm text-stone-500">
-              {scoredRecipes.length} recipe{scoredRecipes.length !== 1 ? "s" : ""} found
-            </span>
-          )}
+          <div className="flex items-center gap-4">
+            {view === "home" && (
+              <span className="text-sm text-stone-500">
+                {t("recipes.found", { count: scoredRecipes.length })}
+              </span>
+            )}
+            <LanguageSwitcher />
+          </div>
         </div>
       </header>
 
@@ -111,17 +112,17 @@ export default function Home() {
           {/* Hero CTA */}
           <div className="text-center mb-8">
             <h2 className="text-4xl font-bold text-stone-900">
-              What should I cook<span className="text-amber-500">?</span>
+              {t("app.tagline")}
             </h2>
             <p className="mt-2 text-stone-500">
-              Select your ingredients and preferences. We&apos;ll find the perfect meal.
+              {t("app.subtitle")}
             </p>
           </div>
 
           {/* Input Section */}
           <div className="rounded-2xl border border-stone-200 bg-white p-6 shadow-sm">
             <h3 className="text-sm font-semibold text-stone-500 uppercase tracking-wide mb-3">
-              What ingredients do you have?
+              {t("ingredients.title")}
             </h3>
             <IngredientSelector
               selected={selectedIngredients}
@@ -133,7 +134,7 @@ export default function Home() {
                 onClick={() => setShowFilters(!showFilters)}
                 className="text-sm font-semibold text-amber-600 hover:text-amber-700 transition cursor-pointer"
               >
-                {showFilters ? "Hide" : "Show"} Filters & Preferences
+                {showFilters ? t("filters.hide") : t("filters.show")}
               </button>
               {showFilters && (
                 <div className="mt-3">
@@ -148,16 +149,18 @@ export default function Home() {
             {scoredRecipes.length === 0 ? (
               <div className="text-center py-12 text-stone-400">
                 <p className="text-5xl mb-4">🍽</p>
-                <p className="text-lg font-medium">No recipes match your criteria</p>
-                <p className="mt-1 text-sm">Try adjusting your ingredients or filters</p>
+                <p className="text-lg font-medium">{t("recipes.noResults")}</p>
+                <p className="mt-1 text-sm">{t("recipes.noResultsHint")}</p>
               </div>
             ) : (
               <>
                 {selectedIngredients.length > 0 && scoredRecipes.length > 0 && (
                   <div className="mb-4 rounded-xl bg-amber-50 border border-amber-200 px-4 py-3 text-sm text-amber-800">
-                    <strong>Top recommendation:</strong> Based on your ingredients, we suggest{" "}
-                    <strong>{scoredRecipes[0].recipe.name}</strong> with a{" "}
-                    {Math.round(scoredRecipes[0].matchScore)}% ingredient match.
+                    <strong>{t("recipes.topRecommendation")}</strong>{" "}
+                    {t("recipes.topRecommendationText", {
+                      name: t(`recipe.name.${scoredRecipes[0].recipe.id}`),
+                      score: Math.round(scoredRecipes[0].matchScore),
+                    })}
                   </div>
                 )}
                 <div className="space-y-4">
@@ -179,8 +182,16 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="mt-16 border-t border-stone-200 py-8 text-center text-sm text-stone-400">
-        DinnerDecided &mdash; Your meal decision engine
+        {t("app.footer")}
       </footer>
     </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <I18nProvider>
+      <App />
+    </I18nProvider>
   );
 }

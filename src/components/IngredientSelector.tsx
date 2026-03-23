@@ -1,6 +1,7 @@
 "use client";
 
 import { ALL_INGREDIENTS } from "@/data/recipes";
+import { useI18n } from "@/lib/i18n-react";
 import { useState } from "react";
 
 interface Props {
@@ -10,10 +11,15 @@ interface Props {
 
 export default function IngredientSelector({ selected, onChange }: Props) {
   const [search, setSearch] = useState("");
+  const { t } = useI18n();
 
-  const filtered = ALL_INGREDIENTS.filter((i) =>
-    i.toLowerCase().includes(search.toLowerCase())
-  );
+  const filtered = ALL_INGREDIENTS.filter((i) => {
+    const q = search.toLowerCase();
+    return (
+      i.toLowerCase().includes(q) ||
+      t(`ingredient.${i}`).toLowerCase().includes(q)
+    );
+  });
 
   const toggle = (ingredient: string) => {
     onChange(
@@ -27,7 +33,7 @@ export default function IngredientSelector({ selected, onChange }: Props) {
     <div>
       <input
         type="text"
-        placeholder="Search ingredients..."
+        placeholder={t("ingredients.search")}
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         className="w-full rounded-xl border border-stone-300 bg-white px-4 py-3 text-sm outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200 transition"
@@ -46,14 +52,14 @@ export default function IngredientSelector({ selected, onChange }: Props) {
               }`}
             >
               {isSelected ? "✓ " : ""}
-              {ingredient}
+              {t(`ingredient.${ingredient}`)}
             </button>
           );
         })}
       </div>
       {selected.length > 0 && (
         <p className="mt-2 text-xs text-stone-500">
-          {selected.length} ingredient{selected.length !== 1 ? "s" : ""} selected
+          {t("ingredients.selected", { count: selected.length })}
         </p>
       )}
     </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { Recipe } from "@/data/recipes";
+import { useI18n } from "@/lib/i18n-react";
 import { useState, useEffect, useCallback } from "react";
 
 interface Props {
@@ -13,6 +14,7 @@ export default function CookingMode({ recipe, onExit }: Props) {
   const [timerSeconds, setTimerSeconds] = useState<number | null>(null);
   const [timerRunning, setTimerRunning] = useState(false);
   const [servingMultiplier, setServingMultiplier] = useState(1);
+  const { t } = useI18n();
 
   const step = recipe.steps[currentStep];
   const totalSteps = recipe.steps.length;
@@ -59,10 +61,10 @@ export default function CookingMode({ recipe, onExit }: Props) {
             onClick={onExit}
             className="text-sm text-stone-400 hover:text-white transition cursor-pointer"
           >
-            &larr; Exit Cooking Mode
+            &larr; {t("cooking.exit")}
           </button>
           <span className="text-sm text-stone-400">
-            {recipe.image} {recipe.name}
+            {recipe.image} {t(`recipe.name.${recipe.id}`)}
           </span>
         </div>
       </div>
@@ -70,7 +72,7 @@ export default function CookingMode({ recipe, onExit }: Props) {
       <div className="mx-auto max-w-2xl px-4 py-6">
         {/* Serving adjuster */}
         <div className="mb-6 flex items-center justify-center gap-4">
-          <span className="text-sm text-stone-400">Servings:</span>
+          <span className="text-sm text-stone-400">{t("cooking.servings")}</span>
           <button
             onClick={() => setServingMultiplier(Math.max(0.5, servingMultiplier - 0.5))}
             className="h-8 w-8 rounded-full bg-stone-700 hover:bg-stone-600 text-lg cursor-pointer"
@@ -102,14 +104,14 @@ export default function CookingMode({ recipe, onExit }: Props) {
             ))}
           </div>
           <p className="mt-2 text-center text-sm text-stone-500">
-            Step {currentStep + 1} of {totalSteps}
+            {t("cooking.stepOf", { current: currentStep + 1, total: totalSteps })}
           </p>
         </div>
 
         {/* Current step */}
         <div className="rounded-2xl bg-stone-800 p-8 text-center">
           <p className="text-xl leading-relaxed font-medium">
-            {step.instruction}
+            {t(`step.${recipe.id}.${currentStep}`)}
           </p>
 
           {/* Timer */}
@@ -122,7 +124,7 @@ export default function CookingMode({ recipe, onExit }: Props) {
                       timerSeconds === 0 ? "text-green-400 animate-pulse" : "text-amber-400"
                     }`}
                   >
-                    {timerSeconds === 0 ? "Done!" : formatTime(timerSeconds)}
+                    {timerSeconds === 0 ? t("cooking.done") : formatTime(timerSeconds)}
                   </div>
                   <div className="mt-3 flex justify-center gap-3">
                     {timerSeconds > 0 && (
@@ -130,7 +132,7 @@ export default function CookingMode({ recipe, onExit }: Props) {
                         onClick={() => setTimerRunning(!timerRunning)}
                         className="rounded-full bg-amber-600 px-5 py-2 text-sm font-semibold hover:bg-amber-500 transition cursor-pointer"
                       >
-                        {timerRunning ? "Pause" : "Resume"}
+                        {timerRunning ? t("cooking.pause") : t("cooking.resume")}
                       </button>
                     )}
                     <button
@@ -140,7 +142,7 @@ export default function CookingMode({ recipe, onExit }: Props) {
                       }}
                       className="rounded-full bg-stone-700 px-5 py-2 text-sm hover:bg-stone-600 transition cursor-pointer"
                     >
-                      Reset
+                      {t("cooking.reset")}
                     </button>
                   </div>
                 </div>
@@ -149,7 +151,7 @@ export default function CookingMode({ recipe, onExit }: Props) {
                   onClick={startTimer}
                   className="rounded-full bg-amber-600 px-6 py-3 text-sm font-semibold hover:bg-amber-500 transition cursor-pointer"
                 >
-                  Start Timer ({formatTime(step.timer)})
+                  {t("cooking.startTimer", { time: formatTime(step.timer) })}
                 </button>
               )}
             </div>
@@ -163,21 +165,21 @@ export default function CookingMode({ recipe, onExit }: Props) {
             disabled={currentStep === 0}
             className="rounded-xl bg-stone-800 px-6 py-3 text-sm font-semibold hover:bg-stone-700 transition disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
           >
-            Previous
+            {t("cooking.previous")}
           </button>
           {currentStep < totalSteps - 1 ? (
             <button
               onClick={() => goToStep(currentStep + 1)}
               className="rounded-xl bg-amber-600 px-6 py-3 text-sm font-semibold hover:bg-amber-500 transition cursor-pointer"
             >
-              Next Step &rarr;
+              {t("cooking.nextStep")} &rarr;
             </button>
           ) : (
             <button
               onClick={onExit}
               className="rounded-xl bg-green-600 px-6 py-3 text-sm font-semibold hover:bg-green-500 transition cursor-pointer"
             >
-              Done Cooking!
+              {t("cooking.doneCooking")}
             </button>
           )}
         </div>
@@ -185,7 +187,9 @@ export default function CookingMode({ recipe, onExit }: Props) {
         {/* Ingredient reference */}
         <details className="mt-8">
           <summary className="cursor-pointer text-sm text-stone-400 hover:text-stone-300 transition">
-            View ingredients ({servingMultiplier !== 1 ? "adjusted" : "original"})
+            {servingMultiplier !== 1
+              ? t("cooking.viewIngredientsAdjusted")
+              : t("cooking.viewIngredients")}
           </summary>
           <ul className="mt-3 space-y-1">
             {recipe.ingredients.map((ing) => (
@@ -196,8 +200,9 @@ export default function CookingMode({ recipe, onExit }: Props) {
                 }`}
               >
                 {ing.amount}
-                {servingMultiplier !== 1 ? ` (×${servingMultiplier})` : ""} — {ing.name}
-                {ing.optional ? " (optional)" : ""}
+                {servingMultiplier !== 1 ? ` (×${servingMultiplier})` : ""} —{" "}
+                {t(`ingredient.${ing.name}`)}
+                {ing.optional ? ` ${t("recipe.optional")}` : ""}
               </li>
             ))}
           </ul>
@@ -206,7 +211,7 @@ export default function CookingMode({ recipe, onExit }: Props) {
         {/* All steps overview */}
         <details className="mt-4 mb-12">
           <summary className="cursor-pointer text-sm text-stone-400 hover:text-stone-300 transition">
-            View all steps
+            {t("cooking.viewAllSteps")}
           </summary>
           <ol className="mt-3 space-y-3">
             {recipe.steps.map((s, i) => (
@@ -222,7 +227,7 @@ export default function CookingMode({ recipe, onExit }: Props) {
                 onClick={() => goToStep(i)}
               >
                 <span className="font-mono text-xs mr-2">{i + 1}.</span>
-                {s.instruction}
+                {t(`step.${recipe.id}.${i}`)}
                 {s.timer && (
                   <span className="ml-2 text-xs text-stone-500">
                     ({formatTime(s.timer)})

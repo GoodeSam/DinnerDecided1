@@ -1,0 +1,581 @@
+export type Locale = "en" | "zh";
+
+let currentLocale: Locale = "en";
+
+export function getLocale(): Locale {
+  return currentLocale;
+}
+
+export function setLocale(locale: Locale) {
+  currentLocale = locale;
+}
+
+export function t(key: string, params?: Record<string, string | number>): string {
+  const dict = currentLocale === "zh" ? zh : en;
+  let value = dict[key];
+  if (value === undefined) return key;
+  if (params) {
+    for (const [k, v] of Object.entries(params)) {
+      value = value.replace(`{${k}}`, String(v));
+    }
+  }
+  return value;
+}
+
+// ─── English ────────────────────────────────────────────────────────────────
+
+const en: Record<string, string> = {
+  // App chrome
+  "app.title": "DinnerDecided",
+  "app.brandAccent": "Dinner",
+  "app.brandRest": "Decided",
+  "app.tagline": "What should I cook?",
+  "app.subtitle": "Select your ingredients and preferences. We'll find the perfect meal.",
+  "app.footer": "DinnerDecided — Your meal decision engine",
+  "app.metaTitle": "DinnerDecided - What Should I Cook?",
+  "app.metaDesc": "AI-powered meal decision engine that helps you decide what to cook based on your ingredients, time, and dietary needs.",
+
+  // Ingredients
+  "ingredients.title": "What ingredients do you have?",
+  "ingredients.search": "Search ingredients...",
+  "ingredients.selected": "{count} ingredient(s) selected",
+
+  // Filters
+  "filters.show": "Show Filters & Preferences",
+  "filters.hide": "Hide Filters & Preferences",
+  "filters.maxTime": "Max Time",
+  "filters.servings": "Servings",
+  "filters.difficulty": "Difficulty",
+  "filters.dietaryGoal": "Dietary Goal",
+  "filters.bloodSugar": "Blood Sugar Friendly",
+  "filters.any": "Any",
+
+  // Recipes list
+  "recipes.found": "{count} recipes found",
+  "recipes.foundSingular": "{count} recipe found",
+  "recipes.noResults": "No recipes match your criteria",
+  "recipes.noResultsHint": "Try adjusting your ingredients or filters",
+  "recipes.topRecommendation": "Top recommendation:",
+  "recipes.topRecommendationText": "Based on your ingredients, we suggest {name} with a {score}% ingredient match.",
+  "recipes.bestChoice": "Best Choice",
+  "recipes.match": "{score}% match",
+
+  // Recipe detail
+  "recipe.backToRecipes": "Back to recipes",
+  "recipe.nutritionTitle": "Nutrition per serving",
+  "recipe.protein": "Protein",
+  "recipe.carbs": "Carbs",
+  "recipe.fat": "Fat",
+  "recipe.fiber": "Fiber",
+  "recipe.bloodSugarNote": "This recipe is blood sugar friendly — low glycemic impact.",
+  "recipe.ingredientsTitle": "Ingredients",
+  "recipe.optional": "(optional)",
+  "recipe.instructionsTitle": "Instructions ({count} steps)",
+  "recipe.startCooking": "Start Cooking Mode",
+
+  // Cooking mode
+  "cooking.exit": "Exit Cooking Mode",
+  "cooking.servings": "Servings:",
+  "cooking.stepOf": "Step {current} of {total}",
+  "cooking.done": "Done!",
+  "cooking.pause": "Pause",
+  "cooking.resume": "Resume",
+  "cooking.reset": "Reset",
+  "cooking.startTimer": "Start Timer ({time})",
+  "cooking.previous": "Previous",
+  "cooking.nextStep": "Next Step",
+  "cooking.doneCooking": "Done Cooking!",
+  "cooking.viewIngredients": "View ingredients (original)",
+  "cooking.viewIngredientsAdjusted": "View ingredients (adjusted)",
+  "cooking.viewAllSteps": "View all steps",
+
+  // Difficulty
+  "difficulty.Easy": "Easy",
+  "difficulty.Medium": "Medium",
+  "difficulty.Hard": "Hard",
+
+  // Units
+  "time.min": "{n} min",
+  "servings.label": "{n} servings",
+  "calories.label": "{n} cal",
+
+  // Dietary tags
+  "dietary.highProtein": "High Protein",
+  "dietary.vegetarian": "Vegetarian",
+  "dietary.vegan": "Vegan",
+  "dietary.lowCarb": "Low Carb",
+  "dietary.quick": "Quick (<20 min)",
+
+  // Filter time options
+  "time.15": "15 min",
+  "time.20": "20 min",
+  "time.30": "30 min",
+  "time.45": "45 min",
+  "time.60": "60 min",
+  "servings.4plus": "4+",
+
+  // Ingredient names
+  "ingredient.Chicken Breast": "Chicken Breast",
+  "ingredient.Ground Beef": "Ground Beef",
+  "ingredient.Salmon": "Salmon",
+  "ingredient.Shrimp": "Shrimp",
+  "ingredient.Tofu": "Tofu",
+  "ingredient.Eggs": "Eggs",
+  "ingredient.Rice": "Rice",
+  "ingredient.Pasta": "Pasta",
+  "ingredient.Bread": "Bread",
+  "ingredient.Noodles": "Noodles",
+  "ingredient.Flour": "Flour",
+  "ingredient.Tortillas": "Tortillas",
+  "ingredient.Tomato": "Tomato",
+  "ingredient.Onion": "Onion",
+  "ingredient.Garlic": "Garlic",
+  "ingredient.Bell Pepper": "Bell Pepper",
+  "ingredient.Broccoli": "Broccoli",
+  "ingredient.Spinach": "Spinach",
+  "ingredient.Carrot": "Carrot",
+  "ingredient.Potato": "Potato",
+  "ingredient.Sweet Potato": "Sweet Potato",
+  "ingredient.Mushroom": "Mushroom",
+  "ingredient.Zucchini": "Zucchini",
+  "ingredient.Avocado": "Avocado",
+  "ingredient.Lemon": "Lemon",
+  "ingredient.Lime": "Lime",
+  "ingredient.Ginger": "Ginger",
+  "ingredient.Green Onion": "Green Onion",
+  "ingredient.Cilantro": "Cilantro",
+  "ingredient.Basil": "Basil",
+  "ingredient.Olive Oil": "Olive Oil",
+  "ingredient.Soy Sauce": "Soy Sauce",
+  "ingredient.Butter": "Butter",
+  "ingredient.Cheese": "Cheese",
+  "ingredient.Cream": "Cream",
+  "ingredient.Coconut Milk": "Coconut Milk",
+  "ingredient.Salt": "Salt",
+  "ingredient.Pepper": "Pepper",
+  "ingredient.Cumin": "Cumin",
+  "ingredient.Paprika": "Paprika",
+  "ingredient.Chili Flakes": "Chili Flakes",
+  "ingredient.Curry Powder": "Curry Powder",
+
+  // Tags
+  "tag.High Protein": "High Protein",
+  "tag.Low Carb": "Low Carb",
+  "tag.Quick": "Quick",
+  "tag.Vegetarian": "Vegetarian",
+  "tag.Healthy": "Healthy",
+  "tag.Omega-3": "Omega-3",
+  "tag.Seafood": "Seafood",
+  "tag.Mexican": "Mexican",
+  "tag.Italian": "Italian",
+  "tag.Comfort Food": "Comfort Food",
+  "tag.Vegan": "Vegan",
+  "tag.Curry": "Curry",
+  "tag.Asian": "Asian",
+  "tag.Budget": "Budget",
+  "tag.Blood Sugar Friendly": "Blood Sugar Friendly",
+  "tag.Bowl": "Bowl",
+
+  // Recipe names
+  "recipe.name.garlic-butter-chicken": "Garlic Butter Chicken",
+  "recipe.name.veggie-stir-fry": "Quick Veggie Stir-Fry",
+  "recipe.name.salmon-teriyaki": "Teriyaki Glazed Salmon",
+  "recipe.name.shrimp-tacos": "Spicy Shrimp Tacos",
+  "recipe.name.mushroom-risotto": "Creamy Mushroom Risotto",
+  "recipe.name.tofu-curry": "Coconut Tofu Curry",
+  "recipe.name.beef-stir-fry-noodles": "Beef & Noodle Stir-Fry",
+  "recipe.name.egg-fried-rice": "Classic Egg Fried Rice",
+  "recipe.name.sweet-potato-bowl": "Roasted Sweet Potato Power Bowl",
+  "recipe.name.pasta-pomodoro": "Pasta Pomodoro",
+
+  // Recipe descriptions
+  "recipe.desc.garlic-butter-chicken": "Juicy pan-seared chicken breast in a rich garlic butter sauce. Simple, satisfying, and ready in 25 minutes.",
+  "recipe.desc.veggie-stir-fry": "Colorful vegetables tossed in a savory soy-ginger sauce over fluffy rice. A weeknight staple that's endlessly customizable.",
+  "recipe.desc.salmon-teriyaki": "Perfectly seared salmon fillets with a sweet and savory homemade teriyaki glaze. Restaurant quality at home.",
+  "recipe.desc.shrimp-tacos": "Zesty lime-chili shrimp tucked into warm tortillas with creamy avocado and fresh cilantro. Fiesta in every bite.",
+  "recipe.desc.mushroom-risotto": "Rich, creamy Italian risotto loaded with earthy mushrooms and finished with parmesan. Worth every stir.",
+  "recipe.desc.tofu-curry": "Crispy tofu cubes swimming in a fragrant coconut curry sauce with vegetables. Comforting, plant-based, and deeply flavorful.",
+  "recipe.desc.beef-stir-fry-noodles": "Tender strips of beef tossed with chewy noodles and crunchy vegetables in a bold soy-ginger sauce.",
+  "recipe.desc.egg-fried-rice": "The ultimate leftover rice hack — smoky wok-fried rice with fluffy eggs and crispy bits. Better than takeout.",
+  "recipe.desc.sweet-potato-bowl": "A nourishing bowl with roasted sweet potatoes, spinach, avocado, and a tahini drizzle. Vibrant, satisfying, and blood-sugar friendly.",
+  "recipe.desc.pasta-pomodoro": "Simple Italian pasta with a fresh tomato-basil sauce. Proof that the best dishes need the fewest ingredients.",
+
+  // Steps: garlic-butter-chicken
+  "step.garlic-butter-chicken.0": "Pat chicken breasts dry and season both sides with salt and pepper.",
+  "step.garlic-butter-chicken.1": "Heat olive oil in a large skillet over medium-high heat until shimmering.",
+  "step.garlic-butter-chicken.2": "Place chicken in the skillet. Cook without moving for 5-6 minutes until golden brown on the bottom.",
+  "step.garlic-butter-chicken.3": "Flip chicken and cook another 5-6 minutes until internal temperature reaches 165°F (74°C).",
+  "step.garlic-butter-chicken.4": "Remove chicken to a plate and let rest. Reduce heat to medium.",
+  "step.garlic-butter-chicken.5": "Add butter and minced garlic to the same skillet. Cook, stirring constantly, for 1 minute until fragrant.",
+  "step.garlic-butter-chicken.6": "Squeeze lemon juice into the butter sauce. Stir to combine and let it bubble for 30 seconds.",
+  "step.garlic-butter-chicken.7": "If using spinach, add it to the pan and toss until just wilted, about 1 minute.",
+  "step.garlic-butter-chicken.8": "Slice chicken, plate it, and spoon the garlic butter sauce over the top. Serve immediately.",
+
+  // Steps: veggie-stir-fry
+  "step.veggie-stir-fry.0": "Cook rice according to package directions if not already prepared. Set aside.",
+  "step.veggie-stir-fry.1": "Heat olive oil in a wok or large skillet over high heat until smoking.",
+  "step.veggie-stir-fry.2": "Add carrots and broccoli first — they take longest. Stir-fry for 2 minutes.",
+  "step.veggie-stir-fry.3": "Add bell pepper and mushrooms. Continue stir-frying for 2 minutes.",
+  "step.veggie-stir-fry.4": "Push vegetables to the sides. Add garlic and ginger to the center. Cook for 30 seconds until fragrant.",
+  "step.veggie-stir-fry.5": "Pour soy sauce over everything. Toss to coat evenly.",
+  "step.veggie-stir-fry.6": "Stir-fry for 1 more minute until sauce glazes the vegetables.",
+  "step.veggie-stir-fry.7": "Serve over rice. Garnish with sliced green onions if desired.",
+
+  // Steps: salmon-teriyaki
+  "step.salmon-teriyaki.0": "Mix soy sauce, ginger, and garlic in a small bowl to make the teriyaki sauce.",
+  "step.salmon-teriyaki.1": "Pat salmon fillets dry with paper towels. Season lightly with salt and pepper.",
+  "step.salmon-teriyaki.2": "Heat olive oil in a non-stick skillet over medium-high heat.",
+  "step.salmon-teriyaki.3": "Place salmon skin-side up in the skillet. Sear for 4 minutes until a golden crust forms.",
+  "step.salmon-teriyaki.4": "Flip salmon to skin-side down. Cook for 3 more minutes.",
+  "step.salmon-teriyaki.5": "Pour the teriyaki sauce into the pan around the salmon. Let it bubble and reduce for 1-2 minutes, spooning it over the fish.",
+  "step.salmon-teriyaki.6": "Remove from heat when salmon is just cooked through (slightly translucent in center is perfect).",
+  "step.salmon-teriyaki.7": "Plate over rice with steamed broccoli. Spoon remaining sauce over the top and garnish with green onions.",
+
+  // Steps: shrimp-tacos
+  "step.shrimp-tacos.0": "Toss shrimp with cumin, paprika, chili flakes, half the lime juice, and salt in a bowl.",
+  "step.shrimp-tacos.1": "Heat olive oil in a skillet over high heat.",
+  "step.shrimp-tacos.2": "Add shrimp in a single layer. Cook for 2 minutes per side until pink and slightly charred.",
+  "step.shrimp-tacos.3": "Warm tortillas in a dry skillet or directly over a gas flame for 15 seconds each side.",
+  "step.shrimp-tacos.4": "Slice avocado and squeeze remaining lime juice over the slices.",
+  "step.shrimp-tacos.5": "Build tacos: tortilla, shrimp, avocado slices, fresh cilantro, and a squeeze of lime.",
+
+  // Steps: mushroom-risotto
+  "step.mushroom-risotto.0": "Heat 4 cups of broth or water in a saucepan and keep it warm on low heat.",
+  "step.mushroom-risotto.1": "In a large pan, heat olive oil and 1 tablespoon butter over medium-high heat. Sauté mushrooms for 5-6 minutes until golden. Remove and set aside.",
+  "step.mushroom-risotto.2": "In the same pan, add remaining butter. Cook onion for 3 minutes until soft.",
+  "step.mushroom-risotto.3": "Add garlic and cook for 30 seconds until fragrant.",
+  "step.mushroom-risotto.4": "Add Arborio rice. Stir for 1-2 minutes until the grains look slightly translucent at the edges.",
+  "step.mushroom-risotto.5": "Add warm broth one ladle at a time, stirring frequently. Wait until liquid is mostly absorbed before adding more. This takes about 18-20 minutes.",
+  "step.mushroom-risotto.6": "When rice is creamy and al dente, stir in the sautéed mushrooms, Parmesan, and a knob of butter.",
+  "step.mushroom-risotto.7": "Season with salt and pepper. The risotto should flow slowly when spooned — add a splash more broth if too thick.",
+  "step.mushroom-risotto.8": "Serve immediately in warm bowls.",
+
+  // Steps: tofu-curry
+  "step.tofu-curry.0": "Press tofu for 10 minutes between paper towels with a heavy object to remove excess moisture. Cut into 1-inch cubes.",
+  "step.tofu-curry.1": "Heat 1 tablespoon olive oil in a large pan over medium-high heat. Fry tofu cubes for 6-8 minutes, turning occasionally until golden on all sides. Remove and set aside.",
+  "step.tofu-curry.2": "In the same pan, heat remaining oil. Sauté onion for 3 minutes until soft.",
+  "step.tofu-curry.3": "Add garlic and ginger. Cook for 1 minute until fragrant.",
+  "step.tofu-curry.4": "Add curry powder and stir for 30 seconds to toast the spices.",
+  "step.tofu-curry.5": "Pour in coconut milk. Add bell pepper. Bring to a gentle simmer and cook for 8 minutes.",
+  "step.tofu-curry.6": "Return crispy tofu to the pan. Add spinach and stir until wilted, about 1 minute.",
+  "step.tofu-curry.7": "Squeeze lime juice over the curry. Taste and adjust seasoning.",
+  "step.tofu-curry.8": "Serve over steamed rice.",
+
+  // Steps: beef-stir-fry-noodles
+  "step.beef-stir-fry-noodles.0": "Cook noodles according to package directions. Drain, toss with a splash of oil to prevent sticking. Set aside.",
+  "step.beef-stir-fry-noodles.1": "Heat 1 tablespoon oil in a wok over high heat. Add beef in a single layer. Sear without moving for 2 minutes.",
+  "step.beef-stir-fry-noodles.2": "Flip and cook another 1 minute. Remove beef and set aside.",
+  "step.beef-stir-fry-noodles.3": "Add remaining oil. Stir-fry carrot and bell pepper for 2 minutes.",
+  "step.beef-stir-fry-noodles.4": "Add garlic and ginger. Cook for 30 seconds.",
+  "step.beef-stir-fry-noodles.5": "Return beef to the wok. Add noodles and soy sauce. Toss everything together over high heat for 2 minutes.",
+  "step.beef-stir-fry-noodles.6": "Add chili flakes if using. Toss once more.",
+  "step.beef-stir-fry-noodles.7": "Plate and garnish generously with sliced green onions.",
+
+  // Steps: egg-fried-rice
+  "step.egg-fried-rice.0": "Break up cold rice with your hands so there are no clumps. This is the secret to great fried rice.",
+  "step.egg-fried-rice.1": "Heat 1 tablespoon oil in a wok over the highest heat possible. It should be smoking.",
+  "step.egg-fried-rice.2": "Pour in beaten eggs. Scramble quickly for 30 seconds until just set but still soft. Remove to a plate.",
+  "step.egg-fried-rice.3": "Add remaining oil to the wok. If using carrots, cook for 1 minute first.",
+  "step.egg-fried-rice.4": "Add rice to the wok. Press it flat against the surface and let it sear without stirring for 30 seconds — this creates the smoky flavor.",
+  "step.egg-fried-rice.5": "Stir and repeat the searing process 2-3 more times over about 3 minutes.",
+  "step.egg-fried-rice.6": "Add garlic and soy sauce. Toss vigorously to coat every grain.",
+  "step.egg-fried-rice.7": "Return scrambled eggs, breaking them into pieces. Add green onions.",
+  "step.egg-fried-rice.8": "Toss once more and serve immediately while piping hot.",
+
+  // Steps: sweet-potato-bowl
+  "step.sweet-potato-bowl.0": "Preheat oven to 425°F (220°C).",
+  "step.sweet-potato-bowl.1": "Toss sweet potato cubes with 1 tablespoon olive oil, cumin, paprika, and salt. Spread on a baking sheet in a single layer.",
+  "step.sweet-potato-bowl.2": "Roast for 25-30 minutes, flipping halfway, until caramelized and tender.",
+  "step.sweet-potato-bowl.3": "While sweet potatoes roast, if using tofu, pan-fry cubes in remaining olive oil until crispy on all sides, about 8 minutes.",
+  "step.sweet-potato-bowl.4": "Make a simple dressing: whisk lemon juice with a drizzle of olive oil and a pinch of salt.",
+  "step.sweet-potato-bowl.5": "Assemble bowls: bed of fresh spinach, roasted sweet potatoes, avocado slices, and tofu if using.",
+  "step.sweet-potato-bowl.6": "Drizzle with lemon dressing. Serve warm.",
+
+  // Steps: pasta-pomodoro
+  "step.pasta-pomodoro.0": "Bring a large pot of generously salted water to a boil. Cook pasta 1 minute less than package directions (it finishes in the sauce). Reserve 1 cup pasta water before draining.",
+  "step.pasta-pomodoro.1": "While pasta cooks, heat olive oil in a large skillet over medium heat. Add sliced garlic and cook until just golden — about 1 minute. Don't let it burn.",
+  "step.pasta-pomodoro.2": "Add diced tomatoes (careful — they'll sputter). Season with salt. Cook for 10 minutes, stirring occasionally, until sauce thickens.",
+  "step.pasta-pomodoro.3": "Add drained pasta directly to the sauce. Toss over medium heat.",
+  "step.pasta-pomodoro.4": "Add pasta water a splash at a time, tossing constantly, until the sauce clings to every strand — about 2 minutes.",
+  "step.pasta-pomodoro.5": "Remove from heat. Tear fresh basil over the top. Add chili flakes if you like heat.",
+  "step.pasta-pomodoro.6": "Plate and finish with grated Parmesan and a drizzle of olive oil.",
+};
+
+// ─── Chinese ────────────────────────────────────────────────────────────────
+
+const zh: Record<string, string> = {
+  // App chrome
+  "app.title": "今晚吃什么",
+  "app.brandAccent": "今晚",
+  "app.brandRest": "吃什么",
+  "app.tagline": "今天做什么菜？",
+  "app.subtitle": "选择你现有的食材和偏好，我们帮你找到最合适的菜谱。",
+  "app.footer": "今晚吃什么 — 你的做饭决策引擎",
+  "app.metaTitle": "今晚吃什么 - 做饭决策助手",
+  "app.metaDesc": "智能做饭决策引擎，根据你的食材、时间和饮食需求，帮你决定今天做什么菜。",
+
+  // Ingredients
+  "ingredients.title": "你有哪些食材？",
+  "ingredients.search": "搜索食材...",
+  "ingredients.selected": "已选择 {count} 种食材",
+
+  // Filters
+  "filters.show": "显示筛选条件",
+  "filters.hide": "隐藏筛选条件",
+  "filters.maxTime": "最长时间",
+  "filters.servings": "用餐人数",
+  "filters.difficulty": "难度",
+  "filters.dietaryGoal": "饮食目标",
+  "filters.bloodSugar": "控糖友好",
+  "filters.any": "不限",
+
+  // Recipes list
+  "recipes.found": "找到 {count} 个食谱",
+  "recipes.foundSingular": "找到 {count} 个食谱",
+  "recipes.noResults": "没有符合条件的食谱",
+  "recipes.noResultsHint": "试试调整食材或筛选条件",
+  "recipes.topRecommendation": "最佳推荐：",
+  "recipes.topRecommendationText": "根据你的食材，推荐 {name}，食材匹配度 {score}%。",
+  "recipes.bestChoice": "最佳选择",
+  "recipes.match": "{score}% 匹配",
+
+  // Recipe detail
+  "recipe.backToRecipes": "返回食谱列表",
+  "recipe.nutritionTitle": "每份营养信息",
+  "recipe.protein": "蛋白质",
+  "recipe.carbs": "碳水",
+  "recipe.fat": "脂肪",
+  "recipe.fiber": "膳食纤维",
+  "recipe.bloodSugarNote": "这道菜控糖友好，血糖影响较低。",
+  "recipe.ingredientsTitle": "食材清单",
+  "recipe.optional": "（可选）",
+  "recipe.instructionsTitle": "烹饪步骤（共 {count} 步）",
+  "recipe.startCooking": "开始做菜",
+
+  // Cooking mode
+  "cooking.exit": "退出做菜模式",
+  "cooking.servings": "份数：",
+  "cooking.stepOf": "第 {current} 步，共 {total} 步",
+  "cooking.done": "完成！",
+  "cooking.pause": "暂停",
+  "cooking.resume": "继续",
+  "cooking.reset": "重置",
+  "cooking.startTimer": "开始计时（{time}）",
+  "cooking.previous": "上一步",
+  "cooking.nextStep": "下一步",
+  "cooking.doneCooking": "做菜完成！",
+  "cooking.viewIngredients": "查看食材（原始用量）",
+  "cooking.viewIngredientsAdjusted": "查看食材（已调整）",
+  "cooking.viewAllSteps": "查看所有步骤",
+
+  // Difficulty
+  "difficulty.Easy": "简单",
+  "difficulty.Medium": "中等",
+  "difficulty.Hard": "困难",
+
+  // Units
+  "time.min": "{n} 分钟",
+  "servings.label": "{n} 人份",
+  "calories.label": "{n} 卡",
+
+  // Dietary tags
+  "dietary.highProtein": "高蛋白",
+  "dietary.vegetarian": "素食",
+  "dietary.vegan": "纯素",
+  "dietary.lowCarb": "低碳水",
+  "dietary.quick": "快手菜（<20分钟）",
+
+  // Filter time options
+  "time.15": "15 分钟",
+  "time.20": "20 分钟",
+  "time.30": "30 分钟",
+  "time.45": "45 分钟",
+  "time.60": "60 分钟",
+  "servings.4plus": "4+",
+
+  // Ingredient names
+  "ingredient.Chicken Breast": "鸡胸肉",
+  "ingredient.Ground Beef": "牛肉末",
+  "ingredient.Salmon": "三文鱼",
+  "ingredient.Shrimp": "虾",
+  "ingredient.Tofu": "豆腐",
+  "ingredient.Eggs": "鸡蛋",
+  "ingredient.Rice": "米饭",
+  "ingredient.Pasta": "意面",
+  "ingredient.Bread": "面包",
+  "ingredient.Noodles": "面条",
+  "ingredient.Flour": "面粉",
+  "ingredient.Tortillas": "玉米饼",
+  "ingredient.Tomato": "番茄",
+  "ingredient.Onion": "洋葱",
+  "ingredient.Garlic": "大蒜",
+  "ingredient.Bell Pepper": "彩椒",
+  "ingredient.Broccoli": "西兰花",
+  "ingredient.Spinach": "菠菜",
+  "ingredient.Carrot": "胡萝卜",
+  "ingredient.Potato": "土豆",
+  "ingredient.Sweet Potato": "红薯",
+  "ingredient.Mushroom": "蘑菇",
+  "ingredient.Zucchini": "西葫芦",
+  "ingredient.Avocado": "牛油果",
+  "ingredient.Lemon": "柠檬",
+  "ingredient.Lime": "青柠",
+  "ingredient.Ginger": "生姜",
+  "ingredient.Green Onion": "小葱",
+  "ingredient.Cilantro": "香菜",
+  "ingredient.Basil": "罗勒",
+  "ingredient.Olive Oil": "橄榄油",
+  "ingredient.Soy Sauce": "酱油",
+  "ingredient.Butter": "黄油",
+  "ingredient.Cheese": "奶酪",
+  "ingredient.Cream": "奶油",
+  "ingredient.Coconut Milk": "椰奶",
+  "ingredient.Salt": "盐",
+  "ingredient.Pepper": "胡椒",
+  "ingredient.Cumin": "孜然",
+  "ingredient.Paprika": "甜椒粉",
+  "ingredient.Chili Flakes": "辣椒片",
+  "ingredient.Curry Powder": "咖喱粉",
+
+  // Tags
+  "tag.High Protein": "高蛋白",
+  "tag.Low Carb": "低碳水",
+  "tag.Quick": "快手菜",
+  "tag.Vegetarian": "素食",
+  "tag.Healthy": "健康",
+  "tag.Omega-3": "富含Omega-3",
+  "tag.Seafood": "海鲜",
+  "tag.Mexican": "墨西哥风味",
+  "tag.Italian": "意大利风味",
+  "tag.Comfort Food": "暖心菜",
+  "tag.Vegan": "纯素",
+  "tag.Curry": "咖喱",
+  "tag.Asian": "亚洲风味",
+  "tag.Budget": "经济实惠",
+  "tag.Blood Sugar Friendly": "控糖友好",
+  "tag.Bowl": "碗食",
+
+  // Recipe names
+  "recipe.name.garlic-butter-chicken": "蒜香黄油鸡",
+  "recipe.name.veggie-stir-fry": "快炒时蔬",
+  "recipe.name.salmon-teriyaki": "照烧三文鱼",
+  "recipe.name.shrimp-tacos": "香辣虾仁塔可",
+  "recipe.name.mushroom-risotto": "奶油蘑菇烩饭",
+  "recipe.name.tofu-curry": "椰香豆腐咖喱",
+  "recipe.name.beef-stir-fry-noodles": "牛肉炒面",
+  "recipe.name.egg-fried-rice": "经典蛋炒饭",
+  "recipe.name.sweet-potato-bowl": "烤红薯能量碗",
+  "recipe.name.pasta-pomodoro": "番茄罗勒意面",
+
+  // Recipe descriptions
+  "recipe.desc.garlic-butter-chicken": "香煎鸡胸肉配浓郁蒜香黄油汁，简单美味，25分钟搞定。",
+  "recipe.desc.veggie-stir-fry": "色彩缤纷的时蔬配酱油姜汁，搭配米饭，百搭的家常快手菜。",
+  "recipe.desc.salmon-teriyaki": "完美煎制的三文鱼配自制照烧酱汁，在家做出餐厅级品质。",
+  "recipe.desc.shrimp-tacos": "酸辣青柠虾仁裹在温热玉米饼中，配上牛油果和香菜，每一口都是惊喜。",
+  "recipe.desc.mushroom-risotto": "浓郁细腻的意式烩饭，满满的蘑菇鲜香，帕玛森芝士收尾，每一次搅拌都值得。",
+  "recipe.desc.tofu-curry": "酥脆豆腐浸在香浓椰香咖喱中，搭配蔬菜，温暖植物基美食的极致。",
+  "recipe.desc.beef-stir-fry-noodles": "嫩滑牛肉丝配劲道面条和爽脆蔬菜，浓郁酱油姜汁风味。",
+  "recipe.desc.egg-fried-rice": "隔夜米饭的终极归宿——锅气十足的蛋炒饭，比外卖还好吃。",
+  "recipe.desc.sweet-potato-bowl": "烤红薯、菠菜、牛油果搭配柠檬汁，色彩缤纷、营养丰富、控糖友好。",
+  "recipe.desc.pasta-pomodoro": "最简单的意式番茄罗勒意面，用最少的食材做出最棒的味道。",
+
+  // Steps: garlic-butter-chicken
+  "step.garlic-butter-chicken.0": "用厨房纸拍干鸡胸肉，两面均匀撒上盐和胡椒。",
+  "step.garlic-butter-chicken.1": "大火在平底锅中加热橄榄油，直到油面微微闪光。",
+  "step.garlic-butter-chicken.2": "放入鸡胸肉，不要翻动，煎5-6分钟至底部金黄。",
+  "step.garlic-butter-chicken.3": "翻面，再煎5-6分钟，至内部温度达到74°C。",
+  "step.garlic-butter-chicken.4": "将鸡肉取出放在盘子上静置，把火调到中火。",
+  "step.garlic-butter-chicken.5": "在同一个锅中加入黄油和蒜末，不断搅拌，炒1分钟至香味溢出。",
+  "step.garlic-butter-chicken.6": "挤入柠檬汁到黄油酱汁中，搅拌均匀，让它冒泡30秒。",
+  "step.garlic-butter-chicken.7": "如果用菠菜，加入锅中翻炒至微微变软，约1分钟。",
+  "step.garlic-butter-chicken.8": "将鸡肉切片装盘，淋上蒜香黄油汁，立即享用。",
+
+  // Steps: veggie-stir-fry
+  "step.veggie-stir-fry.0": "按照包装说明煮好米饭（如果还没准备好的话），放在一旁备用。",
+  "step.veggie-stir-fry.1": "在炒锅中大火加热橄榄油，直到开始冒烟。",
+  "step.veggie-stir-fry.2": "先放入胡萝卜和西兰花——它们需要更长时间。翻炒2分钟。",
+  "step.veggie-stir-fry.3": "加入彩椒和蘑菇，继续翻炒2分钟。",
+  "step.veggie-stir-fry.4": "将蔬菜推到两边，在中间放入蒜末和姜末，炒30秒至出香。",
+  "step.veggie-stir-fry.5": "倒入酱油，翻炒均匀。",
+  "step.veggie-stir-fry.6": "再翻炒1分钟，让酱汁均匀裹住蔬菜。",
+  "step.veggie-stir-fry.7": "盛在米饭上，撒上葱花即可享用。",
+
+  // Steps: salmon-teriyaki
+  "step.salmon-teriyaki.0": "将酱油、姜末和蒜末在小碗中混合，制成照烧酱汁。",
+  "step.salmon-teriyaki.1": "用厨房纸拍干三文鱼，稍微撒些盐和胡椒。",
+  "step.salmon-teriyaki.2": "中大火在不粘锅中加热橄榄油。",
+  "step.salmon-teriyaki.3": "鱼皮朝上放入锅中，煎4分钟至底部形成金黄酥皮。",
+  "step.salmon-teriyaki.4": "翻面，鱼皮朝下，再煎3分钟。",
+  "step.salmon-teriyaki.5": "将照烧酱汁倒在三文鱼周围，让它冒泡收汁1-2分钟，用勺子浇在鱼上。",
+  "step.salmon-teriyaki.6": "三文鱼刚好熟透时离火（中间微微半透明是最佳状态）。",
+  "step.salmon-teriyaki.7": "摆在米饭上，配上清蒸西兰花，淋上剩余酱汁，撒上葱花。",
+
+  // Steps: shrimp-tacos
+  "step.shrimp-tacos.0": "在碗中将虾仁与孜然、甜椒粉、辣椒片、一半的青柠汁和盐拌匀。",
+  "step.shrimp-tacos.1": "大火在平底锅中加热橄榄油。",
+  "step.shrimp-tacos.2": "将虾仁平铺放入锅中，每面煎2分钟至变粉红色并微微焦香。",
+  "step.shrimp-tacos.3": "在干锅中或直接在燃气灶上加热玉米饼，每面15秒。",
+  "step.shrimp-tacos.4": "切好牛油果，挤上剩余的青柠汁。",
+  "step.shrimp-tacos.5": "组装塔可：玉米饼、虾仁、牛油果片、新鲜香菜，再挤一点青柠汁。",
+
+  // Steps: mushroom-risotto
+  "step.mushroom-risotto.0": "在锅中加热4杯高汤或水，保持小火温热。",
+  "step.mushroom-risotto.1": "在大平底锅中，中大火加热橄榄油和1汤匙黄油。炒蘑菇5-6分钟至金黄，取出备用。",
+  "step.mushroom-risotto.2": "在同一个锅中加入剩余黄油，炒洋葱3分钟至变软。",
+  "step.mushroom-risotto.3": "加入蒜末，炒30秒至出香。",
+  "step.mushroom-risotto.4": "加入意大利烩饭米，翻炒1-2分钟至米粒边缘微微透明。",
+  "step.mushroom-risotto.5": "一次加入一勺温热高汤，频繁搅拌。等液体基本吸收后再加下一勺，整个过程约18-20分钟。",
+  "step.mushroom-risotto.6": "当米饭变得绵密且有嚼劲时，拌入炒好的蘑菇、帕玛森芝士和一小块黄油。",
+  "step.mushroom-risotto.7": "用盐和胡椒调味。用勺子舀起时应缓缓流下——如果太稠就再加一点高汤。",
+  "step.mushroom-risotto.8": "立即用温热的碗盛出享用。",
+
+  // Steps: tofu-curry
+  "step.tofu-curry.0": "将豆腐放在厨房纸之间，上面压重物，静置10分钟去除多余水分。切成2.5厘米方块。",
+  "step.tofu-curry.1": "中大火在锅中加热1汤匙橄榄油。煎豆腐6-8分钟，偶尔翻面至六面金黄。取出备用。",
+  "step.tofu-curry.2": "在同一个锅中加热剩余的油，炒洋葱3分钟至变软。",
+  "step.tofu-curry.3": "加入蒜末和姜末，炒1分钟至出香。",
+  "step.tofu-curry.4": "加入咖喱粉，翻炒30秒让香料出香。",
+  "step.tofu-curry.5": "倒入椰奶，加入彩椒。小火慢炖8分钟。",
+  "step.tofu-curry.6": "将煎好的豆腐放回锅中，加入菠菜翻炒至变软，约1分钟。",
+  "step.tofu-curry.7": "挤入青柠汁，尝味并调整调味。",
+  "step.tofu-curry.8": "配蒸米饭享用。",
+
+  // Steps: beef-stir-fry-noodles
+  "step.beef-stir-fry-noodles.0": "按照包装说明煮面条，沥干后拌一点油防粘，放在一旁备用。",
+  "step.beef-stir-fry-noodles.1": "在炒锅中大火加热1汤匙油。将牛肉平铺放入，不要翻动，煎2分钟。",
+  "step.beef-stir-fry-noodles.2": "翻面再煎1分钟。取出牛肉备用。",
+  "step.beef-stir-fry-noodles.3": "加入剩余的油，翻炒胡萝卜和彩椒2分钟。",
+  "step.beef-stir-fry-noodles.4": "加入蒜末和姜末，炒30秒。",
+  "step.beef-stir-fry-noodles.5": "将牛肉放回锅中，加入面条和酱油，大火翻炒2分钟让所有食材混合均匀。",
+  "step.beef-stir-fry-noodles.6": "如果用辣椒片就加入，再翻炒一下。",
+  "step.beef-stir-fry-noodles.7": "装盘，大方地撒上葱花。",
+
+  // Steps: egg-fried-rice
+  "step.egg-fried-rice.0": "用手把冷饭搓散，确保没有结块——这是蛋炒饭好吃的秘诀。",
+  "step.egg-fried-rice.1": "在炒锅中用最大火加热1汤匙油，要烧到冒烟。",
+  "step.egg-fried-rice.2": "倒入打散的蛋液，快速翻炒30秒至刚刚凝固但仍然嫩滑，盛出备用。",
+  "step.egg-fried-rice.3": "在锅中加入剩余的油。如果用胡萝卜，先炒1分钟。",
+  "step.egg-fried-rice.4": "将米饭倒入锅中，用铲子压平贴着锅面，静置30秒不要翻动——这样才有锅气。",
+  "step.egg-fried-rice.5": "翻炒一下，再重复压平-静置的过程2-3次，约3分钟。",
+  "step.egg-fried-rice.6": "加入蒜末和酱油，大力翻炒让每粒米都裹上酱汁。",
+  "step.egg-fried-rice.7": "将炒好的鸡蛋放回锅中，掰成小块，加入葱花。",
+  "step.egg-fried-rice.8": "再翻炒几下，趁热立即享用。",
+
+  // Steps: sweet-potato-bowl
+  "step.sweet-potato-bowl.0": "预热烤箱至220°C。",
+  "step.sweet-potato-bowl.1": "将红薯块与1汤匙橄榄油、孜然、甜椒粉和盐拌匀，平铺在烤盘上。",
+  "step.sweet-potato-bowl.2": "烤25-30分钟，中途翻面一次，烤至焦糖化且软糯。",
+  "step.sweet-potato-bowl.3": "烤红薯期间，如果用豆腐，在剩余橄榄油中煎至六面酥脆，约8分钟。",
+  "step.sweet-potato-bowl.4": "制作简单酱汁：将柠檬汁、少许橄榄油和一撮盐搅拌均匀。",
+  "step.sweet-potato-bowl.5": "组装碗食：先铺新鲜菠菜，放上烤红薯、牛油果片，以及豆腐（如果用的话）。",
+  "step.sweet-potato-bowl.6": "淋上柠檬酱汁，趁温热享用。",
+
+  // Steps: pasta-pomodoro
+  "step.pasta-pomodoro.0": "大锅中烧开大量加了盐的水，比包装说明少煮1分钟（会在酱汁中完成）。沥干前留1杯煮面水。",
+  "step.pasta-pomodoro.1": "煮面的同时，中火在大平底锅中加热橄榄油，放入蒜片煎至微微金黄约1分钟，注意不要焦。",
+  "step.pasta-pomodoro.2": "加入切好的番茄（小心会溅油），撒盐调味，翻炒10分钟至酱汁浓稠。",
+  "step.pasta-pomodoro.3": "将沥干的意面直接加入酱汁中，中火翻拌。",
+  "step.pasta-pomodoro.4": "分次加入煮面水，不断翻拌，直到酱汁均匀裹住每根面条——约2分钟。",
+  "step.pasta-pomodoro.5": "离火，撕碎新鲜罗勒叶撒在面上。喜欢辣的可以加辣椒片。",
+  "step.pasta-pomodoro.6": "装盘，刨上帕玛森芝士，淋一点橄榄油。",
+};
